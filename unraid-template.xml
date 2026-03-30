@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Container version="2">
+  <Name>ByeDPI</Name>
+  <Author>ne0ark</Author>
+  <Summary>DPI circumvention proxy (YouTube/Telegram bypass)</Summary>
+  <Description>ByeDPI is a local SOCKS5 proxy that defeats DPI-based site blocking (Russia/CIS). Set your system proxy to HostIP:ProxyPort (default 127.0.0.1:1080).</Description>
+  <Support>https://github.com/ne0ark/ByeDPI</Support>
+  <Registry>https://hub.docker.com/r/ne0ark/byedpi</Registry>
+  <Repository>https://github.com/ne0ark/ByeDPI</Repository>
+  <Icon>https://raw.githubusercontent.com/ne0ark/ByeDPI/main/.github/icon.png</Icon>
+
+  <Category>Network:Proxy</Category>
+
+  <WebUI/>
+  <BanMacs>false</BanMacs>
+  <BindTime>true</BindTime>
+  <Privileged>false</Privileged>
+  <Protection>false</Protection>
+  <FullTextSearch>byedpi dpi bypass proxy socks</FullTextSearch>
+
+  <Config Name="Proxy Port" Target="1080" Default="1080" Mode="port" Description="SOCKS5 proxy listen port. Set browser/system proxy to HostIP:Port (default 127.0.0.1:1080).">
+    <Variable Name="PROXY_PORT">
+      <Value>1080</Value>
+      <Display>Proxy Port</Display>
+      <Description>SOCKS5 proxy listen port</Description>
+      <Icon></Icon>
+      <Type>Port</Type>
+    </Variable>
+  </Config>
+
+  <Config Name="Bind IP" Target="0.0.0.0" Default="0.0.0.0" Mode="text" Description="IP to bind proxy. Use 0.0.0.0 for all interfaces, 127.0.0.1 for localhost only.">
+    <Variable Name="BIND_IP">
+      <Value>0.0.0.0</Value>
+      <Display>Bind IP</Display>
+      <Description>IP to bind the proxy (0.0.0.0 = all, 127.0.0.1 = localhost only)</Description>
+      <Icon></Icon>
+      <Type>Text</Type>
+    </Variable>
+  </Config>
+
+  <Config Name="DPI Bypass Mode" Target="--disorder 1" Default="--disorder 1" Mode="text" Description="DPI circumvention method. Try --disorder 1 first (Linux), add --fake -1 for harder blocks, use --auto=torst for auto mode.">
+    <Variable Name="BYPASS_METHOD">
+      <Value>--disorder 1</Value>
+      <Display>DPI Bypass Method</Display>
+      <Description>Bypass method: --disorder 1 (Linux), --fake -1 (stronger), --auto=torst --tlsrec 1+s (auto)</Description>
+      <Icon></Icon>
+      <Type>Text</Type>
+    </Variable>
+  </Config>
+
+  <Config Name="Max Connections" Target="512" Default="512" Mode="text" Description="Maximum concurrent client connections.">
+    <Variable Name="MAX_CONNECTIONS">
+      <Value>512</Value>
+      <Display>Max Connections</Display>
+      <Description>Maximum number of concurrent client connections (default: 512)</Description>
+      <Icon></Icon>
+      <Type>Number</Type>
+    </Variable>
+  </Config>
+
+  <Config Name="TTL" Target="8" Default="8" Mode="text" Description="TTL for fake/out-of-order packets. 1-255. Lower = blocked by DPI. Higher = may reach server. Default: 8">
+    <Variable Name="FAKE_TTL">
+      <Value>8</Value>
+      <Display>TTL</Display>
+      <Description>TTL for fake/out-of-order packets. Range 1-255. Default: 8</Description>
+      <Icon></Icon>
+      <Type>Number</Type>
+    </Variable>
+  </Config>
+
+  <Config Name="Extra Arguments" Target="" Default="" Mode="text" Description="Additional ciadpi command-line arguments. See https://github.com/hufrea/byedpi">
+    <Variable Name="EXTRA_ARGS">
+      <Value></Value>
+      <Display>Extra Arguments</Display>
+      <Description>Additional ciadpi arguments (e.g. --tfo, --hosts /path/to/hosts.txt)</Description>
+      <Icon></Icon>
+      <Type>Text</Type>
+    </Variable>
+  </Config>
+
+  <Port Publishing="true">
+    <TargetPort>${PROXY_PORT}</TargetPort>
+    <Access>${PROXY_PORT}</Access>
+    <Protocol>tcp</Protocol>
+  </Port>
+
+  <Environment>
+    <Variable Name="PROXY_PORT" Value="${PROXY_PORT}"/>
+    <Variable Name="BIND_IP" Value="${BIND_IP}"/>
+    <Variable Name="BYPASS_METHOD" Value="${BYPASS_METHOD}"/>
+    <Variable Name="MAX_CONNECTIONS" Value="${MAX_CONNECTIONS}"/>
+    <Variable Name="FAKE_TTL" Value="${FAKE_TTL}"/>
+    <Variable Name="TCP_FASTOPEN" Value="${TCP_FASTOPEN}"/>
+    <Variable Name="EXTRA_ARGS" Value="${EXTRA_ARGS}"/>
+  </Environment>
+
+  <Label/>
+  <Data/>
+</Container>
