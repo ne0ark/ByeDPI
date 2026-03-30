@@ -1,21 +1,23 @@
-FROM alpine:latest AS build
+FROM alpine:latest AS download
 
-RUN apk update && apk add --no-cache \
-            git \
-            build-base \
-            openssl-dev \
-            libpcap-dev \
-            linux-headers \
-            musl-dev
+ENV BYEDPI_VERSION=0.17.3
+ENV BYEDPI_ARCH=x86_64
 
-RUN git clone https://github.com/hufrea/byedpi /opt/byedpi
+RUN apk add --no-cache curl tar \
+ && curl -sL "https://github.com/hufrea/byedpi/releases/download/v${BYEDPI_VERSION}/byedpi-${BYEDPI_VERSION}-${BYEDPI_ARCH}.tar.gz" \
+    -o /tmp/byedpi.tar.gz \
+ && tar -xzf /tmp/byedpi.tar.gz -C /tmp \
+ && install -m 555 /tmp/ciadpi /usr/local/bin/ciadpi \
+ && rm -rf /tmp/byedpi.tar.gz /tmp/ciadpi /tmp/byedpi.*
 
-WORKDIR /opt/byedpi
-RUN LDFLAGS=-static make
-        
 FROM alpine:latest
 
-COPY --from=build /opt /opt
+RUN apk add --no-cache libpcap ca-certificates bash
+
+COPY --from=download /usr/local/bin/ciadpi /usr/local/bin/ciadpi
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 1080
 
-ENTRYPOINT ["/opt/byedpi/ciadpi"]
+ENTRYPOINT ["/entrypoint.sh"]
