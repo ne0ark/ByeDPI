@@ -16,6 +16,8 @@
   <BindTime>true</BindTime>
   <Privileged>false</Privileged>
   <Protection>false</Protection>
+  <NetMode>bridge</NetMode>
+  <ExtraParameters>--cap-add=NET_RAW</ExtraParameters>
   <FullTextSearch>byedpi dpi bypass proxy socks</FullTextSearch>
 
   <Config Name="Proxy Port" Target="1080" Default="1080" Mode="port" Description="SOCKS5 proxy listen port. Set browser/system proxy to HostIP:Port (default 127.0.0.1:1080).">
@@ -38,11 +40,11 @@
     </Variable>
   </Config>
 
-  <Config Name="DPI Bypass Mode" Target="--disorder 1" Default="--disorder 1" Mode="text" Description="DPI circumvention method. Try --disorder 1 first (Linux), add --fake -1 for harder blocks, use --auto=torst for auto mode.">
+  <Config Name="DPI Bypass Mode" Target="--disorder 1" Default="--disorder 1" Mode="text" Description="DPI circumvention method. Linux: --disorder 1. Windows: --split 1+s --disorder 3+s. Stronger: --fake -1. Auto: --auto=torst --tlsrec 1+s">
     <Variable Name="BYPASS_METHOD">
       <Value>--disorder 1</Value>
       <Display>DPI Bypass Method</Display>
-      <Description>Bypass method: --disorder 1 (Linux), --fake -1 (stronger), --auto=torst --tlsrec 1+s (auto)</Description>
+      <Description>Bypass method: --disorder 1 (Linux), --split 1+s --disorder 3+s (Windows), --fake -1 (stronger), --auto=torst --tlsrec 1+s (auto)</Description>
       <Icon></Icon>
       <Type>Text</Type>
     </Variable>

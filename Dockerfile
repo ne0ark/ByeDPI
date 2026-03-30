@@ -4,8 +4,7 @@ ENV BYEDPI_VERSION=0.17.3
 ENV BYEDPI_ARCH=x86_64
 
 RUN apk add --no-cache curl tar \
- && FILE_VERSION=$(echo "${BYEDPI_VERSION}" | sed 's/^0//') \
- && curl -sL "https://github.com/hufrea/byedpi/releases/download/v${BYEDPI_VERSION}/byedpi-${FILE_VERSION}-${BYEDPI_ARCH}.tar.gz" \
+ && curl -sfL "https://github.com/hufrea/byedpi/releases/download/v${BYEDPI_VERSION}/byedpi-${BYEDPI_VERSION#0}-${BYEDPI_ARCH}.tar.gz" \
     -o /tmp/byedpi.tar.gz \
  && tar -xzf /tmp/byedpi.tar.gz -C /tmp \
  && install -m 555 /tmp/ciadpi /usr/local/bin/ciadpi \
