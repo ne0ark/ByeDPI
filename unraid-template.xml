@@ -14,9 +14,10 @@
   <WebUI/>
   <BanMacs>false</BanMacs>
   <BindTime>true</BindTime>
-  <Privileged>true</Privileged>
+  <Privileged>false</Privileged>
   <Protection>false</Protection>
   <NetMode>bridge</NetMode>
+  <ExtraParameters>--cap-add=NET_RAW</ExtraParameters>
   <FullTextSearch>byedpi dpi bypass proxy socks</FullTextSearch>
 
   <Config Name="Proxy Port" Target="1080" Default="1080" Mode="port" Description="SOCKS5 proxy listen port. Set browser/system proxy to HostIP:Port (default 127.0.0.1:1080).">
