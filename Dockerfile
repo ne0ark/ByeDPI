@@ -2,9 +2,9 @@ FROM alpine:latest AS download
 
 ENV BYEDPI_ARCH=x86_64
 
-RUN apk add --no-cache curl tar jq \
+RUN apk add --no-cache curl tar \
  && DOWNLOAD_URL=$(curl -sfL https://api.github.com/repos/hufrea/byedpi/releases/latest \
-    | jq -r '.assets[] | select(.name | test("byedpi-[0-9.]+-'${BYEDPI_ARCH}'\\.tar\\.gz")) | .browser_download_url' \
+    | grep -oE "https://[^\"]+${BYEDPI_ARCH}\.tar\.gz" \
     | head -1) \
  && curl -sfL "$DOWNLOAD_URL" -o /tmp/byedpi.tar.gz \
  && tar -xzf /tmp/byedpi.tar.gz -C /tmp \
