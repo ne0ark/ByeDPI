@@ -3,8 +3,9 @@ FROM alpine:latest AS download
 ENV BYEDPI_ARCH=x86_64
 
 RUN apk add --no-cache curl tar \
- && TAG=$(curl -sfL https://api.github.com/repos/hufrea/byedpi/releases/latest | grep -m1 '"tag_name"' | sed 's/.*"tag_name": *"\([^"]*\)".*/\1/') \
- && curl -sfL "https://github.com/hufrea/byedpi/releases/download/${TAG}/byedpi-${TAG#v}-${BYEDPI_ARCH}.tar.gz" -o /tmp/byedpi.tar.gz \
+ && curl -sfL -o /tmp/byedpi.tar.gz "$(curl -sfL https://api.github.com/repos/hufrea/byedpi/releases/latest \
+    | grep -o 'https://github.com/hufrea/byedpi/releases/download/[^"]*'"${BYEDPI_ARCH}"'.tar.gz' \
+    | head -1)" \
  && tar -xzf /tmp/byedpi.tar.gz -C /tmp \
  && install -m 555 /tmp/ciadpi /usr/local/bin/ciadpi \
  && rm -rf /tmp/byedpi.tar.gz /tmp/ciadpi /tmp/byedpi.*
