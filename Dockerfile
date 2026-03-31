@@ -2,13 +2,10 @@ FROM alpine:latest AS download
 
 ENV BYEDPI_ARCH=x86_64
 
+COPY download.sh /tmp/download.sh
 RUN apk add --no-cache curl tar \
- && curl -sfL -o /tmp/byedpi.tar.gz "$(curl -sfL https://api.github.com/repos/hufrea/byedpi/releases/latest \
-    | grep -o 'https://github.com/hufrea/byedpi/releases/download/[^"]*'"${BYEDPI_ARCH}"'.tar.gz' \
-    | head -1)" \
- && tar -xzf /tmp/byedpi.tar.gz -C /tmp \
- && install -m 555 /tmp/ciadpi /usr/local/bin/ciadpi \
- && rm -rf /tmp/byedpi.tar.gz /tmp/ciadpi /tmp/byedpi.*
+ && chmod +x /tmp/download.sh \
+ && /tmp/download.sh
 
 FROM alpine:latest
 
