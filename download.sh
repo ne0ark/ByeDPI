@@ -20,7 +20,15 @@ echo "Extracting..."
 tar -xzf /tmp/byedpi.tar.gz -C /tmp
 
 echo "Installing ciadpi..."
-install -m 555 /tmp/ciadpi /usr/local/bin/ciadpi
+# The tarball contains ciadpi-{arch}, not ciadpi
+BINARY=$(find /tmp -maxdepth 1 -name 'ciadpi*' -type f | head -1)
+if [ -z "$BINARY" ]; then
+    echo "ERROR: Could not find ciadpi binary in /tmp"
+    ls -la /tmp/
+    exit 1
+fi
+echo "Found binary: ${BINARY}"
+install -m 555 "$BINARY" /usr/local/bin/ciadpi
 
 echo "Cleaning up..."
-rm -rf /tmp/byedpi.tar.gz /tmp/ciadpi /tmp/byedpi.*
+rm -rf /tmp/byedpi.tar.gz /tmp/ciadpi*
